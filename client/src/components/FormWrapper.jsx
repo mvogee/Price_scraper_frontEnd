@@ -1,6 +1,6 @@
 import React from "react";
 import QueryForm from "./SqlQueryForm";
-import SearchForm from "./SearchForm";
+import Select from "./Select";
 
 
 
@@ -92,27 +92,43 @@ export default class FormWrapper extends React.Component{
         return (
             <form>
                 <QueryForm name="Matthew Vogee"/>
-                <SearchForm
-                    selectedVendor={this.state.selectedVendor}
-                    vendorList={this.state.vendorList}
-                    handleVendorChange={this.handleVendorChange}
-
-                    selectedCategory={this.state.selectedCategory}
-                    categoryList={this.state.categoryList}
-                    handleCatChange={this.handleCatChange}
-                    
-                    selectedSubCatOne={this.state.selectedSubCatOne}
-                    subCatListOne={this.state.subCatListOne}
-                    handleSubCatOneChange={this.handleSubCatOneChange}
-                    
-                    selectedSubCatTwo={this.state.selectedSubCatTwo}
-                    subCatListTwo={this.state.subCatListTwo}
-                    handleSubCatTwoChange={this.handleSubCatTwoChange}
-                    
-                    selectedSubCatThree={this.state.selectedSubCatThree}
-                    subCatListThree={this.state.subCatListThree}
-                    handleSubCatThreeChange={this.handleSubCatThreeChange}
-                    />
+                <Select
+                    label="Vendor"
+                    selectName="vendorList"
+                    selected={this.state.selectedVendor}
+                    onChange={this.handleVendorChange}
+                    optionList={this.state.vendorList}
+                />
+                <Select
+                    label="Category"
+                    selectName="categoryList"
+                    selected={this.state.selectedCategory}
+                    onChange={this.handleCatChange}
+                    optionList={this.state.categoryList}
+                />
+                <Select
+                    label="Sub Category"
+                    selectName="SubCategory"
+                    selected={this.state.selectedSubCatOne}
+                    onChange={this.handleSubCatOneChange}
+                    optionList={this.state.subCatListOne}
+                />
+                <Select
+                    label="Filter 1"
+                    selectName="filterOne"
+                    selected={this.state.selectedSubCatTwo}
+                    onChange={this.handleSubCatTwoChange}
+                    optionList={this.state.subCatListTwo}
+                />
+                <Select
+                    label="filter 2"
+                    selectName="filterTwo"
+                    selected={this.state.selectedSubCatThree}
+                    onChange={this.handleSubCatThreeChange}
+                    optionList={this.state.subCatListThree}
+                />
+                 <label htmlFor="nameSearch">Search</label>
+                <input name="nameSearch" type="text" value={this.state.nameSearch} onChange={this.handleSearchChange} placeholder="Search term"></input>
                 <button type="submit" value="submit" onClick={this.handleSubmit}>Search</button>
             </form>
         )

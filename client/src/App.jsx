@@ -1,6 +1,6 @@
 
 import './App.css';
-import FormWrapper from './FormWrapper';
+import FormWrapper from './components/FormWrapper';
 
 function App() {
 const vendors = [{key: 4, value:"select"}, {key: 0, value: "platt"}, {key: 1, value: "Home Deport"}, {key: 2, value: "Bell Electric"}];
