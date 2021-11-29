@@ -40,8 +40,6 @@ export default class SearchWrapper extends React.Component{
     }
 
     handleVendorChange(e) {
-        console.log(e);
-        console.log(e.target.value);
         this.setState({
             selectedVendor: e.target.value,
             categoryList: [{key: 0, value: "new 1"}, {key: 1, value: "new 2"}, {key: 2, value: "new 3"}, {key: 3, value: "new 4"}]
@@ -76,38 +74,41 @@ export default class SearchWrapper extends React.Component{
         this.setState({
             nameSearch: e.target.value
         });
-        console.log(this.state.nameSearch);
+    }
+
+    requestQueryData = async (queryInputs) => {
+        const options = {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                body: JSON.stringify(queryInputs) // body data type must match "Content-Type" header
+                };
+        const response = await fetch("/search" , options);
+        const body = await response.json();
+        this.setState({data: body});
     }
 
     handleSubmit(e) {
         e.preventDefault();
         console.log("submit button was pressed.");
-        console.log(this.state.selectedVendor);
-        console.log(this.state.selectedCategory);
-        console.log(this.state.selectedSubCatOne);
-        console.log(this.state.selectedSubCatTwo);
-        console.log(this.state.selectedSubCatThree);
-        console.log(this.state.nameSearch);
+        const queryData = {
+            vendor: this.state.selectedVendor,
+            category: this.state.selectedCategory,
+            subCat: this.state.selectedSubCatOne,
+            subCatTwo: this.state.selectedSubCatTwo,
+            subCatThree: this.state.selectedSubCatThree,
+            nameSearch: this.state.nameSearch
+        }
+        //console.log(queryData);
+        this.requestQueryData(queryData);
         // query database for results based off of these states. if a state is not set should be * in query
-        this.setState({
-            data: [{
-                headline: "Unistrut P1212     EG Universal Conduit Clamp 3/4 ' ",
-                category: 'Fittings',
-                subCategorys: [
-                    'Strut - Fittings & Support',
-                    'Pipe & Conduit Clamps',
-                    'Strut Conduit Clamps - Universal'
-                ],
-                manufacturer: 'Unistrut',
-                price: 'Call for Price800-257-5288Email Live Help',
-                detailDescription: 'Universal Strut Strap, Diameter: 3/4 in, Material: Steel, Finish: Electro-Galvanized. For Rigid/Thinwall Conduit.   ',
-                plattItemId: '0060060',
-                date_updated: "2021-11-29T18:36:25.178Z",
-                img_link: 'https://rexel-cdn.com/Products/StrutConduitClamps-Universal/Unistrut/P1212EG.jpg?i=D0B84F12-3A57-4914-93B5-4C2A526C1EF3&f=150',
-                alsoKnownAs: 'Also known as: 786364121215, UNSP1212EG, Unistrut, P1212     EG, Strut Conduit Clamps - Universal, Pipe & Conduit Clamps, Strut - Fittings & Support, Fittings',
-                upc: '786364121215'
-            }]
-        });
     }
     render() {
         console.log(this.props);
