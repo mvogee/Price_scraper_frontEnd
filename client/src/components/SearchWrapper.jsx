@@ -1,10 +1,11 @@
 import React from "react";
 import QueryForm from "./SqlQueryForm";
 import Select from "./Select";
+import ResultViewer from "./ResultViewer";
 
 
 
-export default class FormWrapper extends React.Component{
+export default class SearchWrapper extends React.Component{
 
     constructor(props) {
         super(props);
@@ -13,18 +14,20 @@ export default class FormWrapper extends React.Component{
             vendorList: this.props.vendors,
 
             selectedCategory: [{key: 0, value: "none"}],
-            categoryList: ([{key: 0, value: "select"}]),
+            categoryList: [{key: 0, value: "select"}],
 
-            selectedSubCatOne: ({key: 0, value: "none"}),
-            subCatListOne: ([{key: 0, value: "select"}]),
+            selectedSubCatOne: {key: 0, value: "none"},
+            subCatListOne: [{key: 0, value: "select"}],
 
-            selectedSubCatTwo: ({key: 0, value: "none"}),
-            subCatListTwo: ([{key: 0, value: "select"}]),
+            selectedSubCatTwo: {key: 0, value: "none"},
+            subCatListTwo: [{key: 0, value: "select"}],
 
-            selectedSubCatThree: ({key: 0, value: "none"}),
-            subCatListThree: ([{key: 0, value: "select"}]),
+            selectedSubCatThree: {key: 0, value: "none"},
+            subCatListThree: [{key: 0, value: "select"}],
 
-            nameSearch: ""
+            nameSearch: "",
+
+            data: []
         };
         this.handleVendorChange = this.handleVendorChange.bind(this);
         this.handleCatChange = this.handleCatChange.bind(this);
@@ -86,10 +89,30 @@ export default class FormWrapper extends React.Component{
         console.log(this.state.selectedSubCatThree);
         console.log(this.state.nameSearch);
         // query database for results based off of these states. if a state is not set should be * in query
+        this.setState({
+            data: [{
+                headline: "Unistrut P1212     EG Universal Conduit Clamp 3/4 ' ",
+                category: 'Fittings',
+                subCategorys: [
+                    'Strut - Fittings & Support',
+                    'Pipe & Conduit Clamps',
+                    'Strut Conduit Clamps - Universal'
+                ],
+                manufacturer: 'Unistrut',
+                price: 'Call for Price800-257-5288Email Live Help',
+                detailDescription: 'Universal Strut Strap, Diameter: 3/4 in, Material: Steel, Finish: Electro-Galvanized. For Rigid/Thinwall Conduit.   ',
+                plattItemId: '0060060',
+                date_updated: "2021-11-29T18:36:25.178Z",
+                img_link: 'https://rexel-cdn.com/Products/StrutConduitClamps-Universal/Unistrut/P1212EG.jpg?i=D0B84F12-3A57-4914-93B5-4C2A526C1EF3&f=150',
+                alsoKnownAs: 'Also known as: 786364121215, UNSP1212EG, Unistrut, P1212     EG, Strut Conduit Clamps - Universal, Pipe & Conduit Clamps, Strut - Fittings & Support, Fittings',
+                upc: '786364121215'
+            }]
+        });
     }
     render() {
         console.log(this.props);
         return (
+            <div className="searchWrapper">
             <form>
                 <QueryForm name="Matthew Vogee"/>
                 <Select
@@ -131,6 +154,10 @@ export default class FormWrapper extends React.Component{
                 <input name="nameSearch" type="text" value={this.state.nameSearch} onChange={this.handleSearchChange} placeholder="Search term"></input>
                 <button type="submit" value="submit" onClick={this.handleSubmit}>Search</button>
             </form>
+            <div className="results">
+                <ResultViewer data={this.state.data} />
+            </div>
+            </div>
         )
     }
 }
