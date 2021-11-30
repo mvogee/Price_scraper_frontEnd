@@ -2,9 +2,9 @@ import React from "react";
 
 export default class Select extends React.Component {
 
-    selectOptions(option) {
-        console.log("option");
-        return (<option className="list-item" key={option.key} value={option.value}>{option.value}</option>)
+    selectOptions(option, idx) {
+        console.log(option);
+        return (<option className="list-item" key={idx} value={option.value}>{option.value}</option>)
     }
 
     render() {

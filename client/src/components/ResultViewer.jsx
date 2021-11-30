@@ -9,6 +9,7 @@ function ResultViewer(props) {
     function item(item){
         return (
             <ItemCard
+                // key={item.id} //! only effective once data is coming from database
                 imageurl={item.img_link}
                 headline={item.headline}
                 category={item.category ? item.category : ""}

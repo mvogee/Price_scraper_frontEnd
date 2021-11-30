@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const mysql = require("./db.js").pool;
 //const plattItm = require("./db.js").plattItm;
 
 const app = express();
@@ -8,7 +9,23 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 const port = process.env.port || 3095;
 
-
+function getTable(vendor) {
+    let table;
+    switch (vendor) {
+        case "Platt":
+            table = 'platt_products';
+            break;
+        case "Home Depot":
+            table = 'platt_products'; // change this once scraper for home depot is done
+            break;
+        case "Bell Electric":
+            table = 'platt_products'; // change this once scraper for bell is done.
+        default:
+            table = 'platt_products';
+            break;
+    }
+    return table;
+}
 // connect to database.
 // post route for sql query
 // post route for filter querys
@@ -58,6 +75,44 @@ app.post("/search", (req, res) => {
         ];
     console.log(req.body);
     res.send(JSON.stringify(data));
+});
+
+app.post("/vendorSelect", (req, res) => {
+    let table = getTable(req.body.selectedVendor);
+    let sql = "SELECT DISTINCT category FROM " + table + ";"
+    mysql.query(sql, (err, result) => {
+        console.log(result);
+        if (err) {
+            console.log(err);
+            res.json({error: err, message: "database error"});
+        }
+        else {
+            res.send(result);
+        }
+    });
+    // send back the categorys from the selected Vendor
+});
+app.post("/categorySelect", (req, res) => {
+    let table = getTable(req.body.selectedVendor);
+    let category = req.body.selectedCategory;
+    let sql = "SELECT DISTINCT sub_category_one FROM " + table + " WHERE category=?;"
+    mysql.query(sql, category, (err, result) => {
+        console.log(result);
+        if (err) {
+            console.log(err);
+            res.json({error: err, message: "database error"});
+        }
+        else {
+            res.send(result);
+        }
+    });
+    // send back the sub categorys from selected category
+});
+app.post("/subCatSelect", (req, res) => {
+    // send back sub2 categorys
+});
+app.post("/filterOneSelect", (req, res) => {
+    // send back sub3 categorys
 });
 
 app.listen(port, () => {

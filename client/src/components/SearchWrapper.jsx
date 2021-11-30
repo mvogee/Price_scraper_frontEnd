@@ -39,44 +39,7 @@ export default class SearchWrapper extends React.Component{
         
     }
 
-    handleVendorChange(e) {
-        this.setState({
-            selectedVendor: e.target.value,
-            categoryList: [{key: 0, value: "new 1"}, {key: 1, value: "new 2"}, {key: 2, value: "new 3"}, {key: 3, value: "new 4"}]
-            // here depending on the vendor chosen go to database and get all categorys for that vendor.
-        });
-    }
-    handleCatChange(e) {
-        this.setState({
-            selectedCategory: e.target.value,
-            subCatListOne: [{key: 0, value: "sub 1"}, {key: 1, value: "sub 2"}, {key: 2, value: "sub 3"}, {key: 3, value: "sub 4"}]
-            // here depending on the category chosen will query the database for this list.
-        });
-    }
-    handleSubCatOneChange(e) {
-        this.setState({
-            selectedSubCatOne: e.target.value,
-            subCatListTwo: [{key: 0, value: "sub2 1"}, {key: 1, value: "sub2 2"}, {key: 2, value: "sub2 3"}, {key: 3, value: "sub2 4"}]
-        });
-    }
-    handleSubCatTwoChange(e) {
-        this.setState({
-            selectedSubCatTwo: e.target.value,
-            subCatListThree: [{key: 0, value: "sub3 1"}, {key: 1, value: "sub3 2"}, {key: 2, value: "sub3 3"}, {key: 3, value: "sub3 4"}]
-        });
-    }
-    handleSubCatThreeChange(e) {
-        this.setState({
-            selectedSubCatThree: e.target.value
-        });
-    }
-    handleSearchChange(e) {
-        this.setState({
-            nameSearch: e.target.value
-        });
-    }
-
-    requestQueryData = async (queryInputs) => {
+    serverDataRequest = async (route, queryInputs, setStateFunc) => {
         const options = {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
@@ -90,9 +53,83 @@ export default class SearchWrapper extends React.Component{
                 referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
                 body: JSON.stringify(queryInputs) // body data type must match "Content-Type" header
                 };
-        const response = await fetch("/search" , options);
+        const response = await fetch(route , options);
         const body = await response.json();
-        this.setState({data: body});
+        setStateFunc(body);
+    }
+
+    handleVendorChange(e) {
+        const searchData = {selectedVendor: e.target.value}
+        this.serverDataRequest("/vendorSelect", searchData, (data) => {
+            const formattedData = data.map((item, idx) => {
+                return {key: idx, value: item.category};
+            });
+            this.setState({categoryList: formattedData})
+        });
+        this.setState({
+            selectedVendor: e.target.value,
+            selectedCategory: "none",
+            selectedSubCatOne: "none",
+            selectedSubCatTwo: "none",
+            selectedSubCatThree: "none"
+        });
+    }
+    handleCatChange(e) {
+        const searchData = {
+            selectedVendor: this.state.selectedVendor,
+            selectedCategory: e.target.value
+            };
+        this.serverDataRequest("/categorySelect", searchData, (data) => {
+            const formattedData = data.map((item, idx) => {
+                return ({key: idx, value: item.sub_category_one});
+            });
+            this.setState({subCatListOne: formattedData})
+            });
+        this.setState({
+            selectedCategory: e.target.value,
+            selectedSubCatOne: "none",
+            selectedSubCatTwo: "none",
+            selectedSubCatThree: "none"
+            //subCatListOne: [{key: 0, value: "sub 1"}, {key: 1, value: "sub 2"}, {key: 2, value: "sub 3"}, {key: 3, value: "sub 4"}]
+            // here depending on the category chosen will query the database for this list.
+        });
+    }
+    handleSubCatOneChange(e) {
+        const searchData = {
+            selectedVendor: this.state.selectedVendor,
+            selectedCategory: this.state.selectedCategory,
+            selectedSubCategory: e.target.value
+        }
+        this.serverDataRequest("/subCatSelect", searchData, (data) => {this.setState({subCatListTwo: data})});
+        this.setState({
+            selectedSubCatOne: e.target.value,
+            selectedSubCatTwo: "none",
+            selectedSubCatThree: "none"
+            //subCatListTwo: [{key: 0, value: "sub2 1"}, {key: 1, value: "sub2 2"}, {key: 2, value: "sub2 3"}, {key: 3, value: "sub2 4"}]
+        });
+    }
+    handleSubCatTwoChange(e) {
+        const searchData = {
+            selectedVendor: this.state.selectedVendor,
+            selectedCategory: this.state.selectedCategory,
+            selectedSubCategory: this.state.selectedSubCatOne,
+            selectedSubCatTwo: e.target.value
+        }
+        this.serverDataRequest("/filterOneSelect", searchData, (data) => {this.setState({subCatListThree: data})});
+        this.setState({
+            selectedSubCatTwo: e.target.value,
+            //subCatListThree: [{key: 0, value: "sub3 1"}, {key: 1, value: "sub3 2"}, {key: 2, value: "sub3 3"}, {key: 3, value: "sub3 4"}]
+        });
+    }
+    handleSubCatThreeChange(e) {
+        this.setState({
+            selectedSubCatThree: e.target.value
+        });
+    }
+    handleSearchChange(e) {
+        this.setState({
+            nameSearch: e.target.value
+        });
     }
 
     handleSubmit(e) {
@@ -107,7 +144,7 @@ export default class SearchWrapper extends React.Component{
             nameSearch: this.state.nameSearch
         }
         //console.log(queryData);
-        this.requestQueryData(queryData);
+        this.serverDataRequest("/search", queryData, (data) => {this.setState({data: data})});
         // query database for results based off of these states. if a state is not set should be * in query
     }
     render() {
