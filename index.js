@@ -81,38 +81,63 @@ app.post("/vendorSelect", (req, res) => {
     let table = getTable(req.body.selectedVendor);
     let sql = "SELECT DISTINCT category FROM " + table + ";"
     mysql.query(sql, (err, result) => {
-        console.log(result);
         if (err) {
             console.log(err);
             res.json({error: err, message: "database error"});
         }
         else {
+            console.log(result);
             res.send(result);
         }
     });
-    // send back the categorys from the selected Vendor
 });
 app.post("/categorySelect", (req, res) => {
     let table = getTable(req.body.selectedVendor);
     let category = req.body.selectedCategory;
-    let sql = "SELECT DISTINCT sub_category_one FROM " + table + " WHERE category=?;"
+    let sql = "SELECT DISTINCT sub_category_one FROM " + table + " WHERE category=?;";
     mysql.query(sql, category, (err, result) => {
-        console.log(result);
         if (err) {
             console.log(err);
             res.json({error: err, message: "database error"});
         }
         else {
+            console.log(result);
             res.send(result);
         }
     });
-    // send back the sub categorys from selected category
 });
 app.post("/subCatSelect", (req, res) => {
-    // send back sub2 categorys
+    let table = getTable(req.body.selectedVendor);
+    let category = req.body.selectedCategory;
+    let subCat = req.body.selectedSubCategory;
+    let sql = "SELECT DISTINCT sub_category_two FROM " + table + " WHERE category=? AND sub_category_one=?;";
+    mysql.query(sql, [category, subCat], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({error: err, message: "database error"});
+        }
+        else {
+            console.log(result);
+            res.send(result);
+        }
+    });
 });
 app.post("/filterOneSelect", (req, res) => {
-    // send back sub3 categorys
+    let table = getTable(req.body.selectedVendor);
+    let category = req.body.selectedCategory;
+    let subCat = req.body.selectedSubCategory;
+    let filter = req.body.selectedSubCatTwo;
+    let sql = "SELECT DISTINCT sub_category_three FROM " + table + " WHERE category=? AND sub_category_one=? AND sub_category_two=?;";
+    mysql.query(sql, [category, subCat, filter], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({error: err, message: "database error"});
+        }
+        else {
+            console.log(result);
+            res.send(result);
+        }
+    });
 });
 
 app.listen(port, () => {

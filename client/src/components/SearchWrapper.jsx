@@ -14,16 +14,16 @@ export default class SearchWrapper extends React.Component{
             vendorList: this.props.vendors,
 
             selectedCategory: [{key: 0, value: "none"}],
-            categoryList: [{key: 0, value: "select"}],
+            categoryList: [{key: 0, value: "none"}],
 
             selectedSubCatOne: {key: 0, value: "none"},
-            subCatListOne: [{key: 0, value: "select"}],
+            subCatListOne: [{key: 0, value: "none"}],
 
             selectedSubCatTwo: {key: 0, value: "none"},
-            subCatListTwo: [{key: 0, value: "select"}],
+            subCatListTwo: [{key: 0, value: "none"}],
 
             selectedSubCatThree: {key: 0, value: "none"},
-            subCatListThree: [{key: 0, value: "select"}],
+            subCatListThree: [{key: 0, value: "none"}],
 
             nameSearch: "",
 
@@ -60,12 +60,14 @@ export default class SearchWrapper extends React.Component{
 
     handleVendorChange(e) {
         const searchData = {selectedVendor: e.target.value}
-        this.serverDataRequest("/vendorSelect", searchData, (data) => {
-            const formattedData = data.map((item, idx) => {
-                return {key: idx, value: item.category};
-            });
-            this.setState({categoryList: formattedData})
-        });
+        this.serverDataRequest("/vendorSelect", searchData,
+            (data) => {
+                const formattedData = data.map((item, idx) => {
+                    return {key: idx, value: item.category};
+                });
+                this.setState({categoryList: formattedData});
+            }
+        );
         this.setState({
             selectedVendor: e.target.value,
             selectedCategory: "none",
@@ -79,19 +81,22 @@ export default class SearchWrapper extends React.Component{
             selectedVendor: this.state.selectedVendor,
             selectedCategory: e.target.value
             };
-        this.serverDataRequest("/categorySelect", searchData, (data) => {
-            const formattedData = data.map((item, idx) => {
-                return ({key: idx, value: item.sub_category_one});
-            });
-            this.setState({subCatListOne: formattedData})
-            });
+        this.serverDataRequest("/categorySelect", searchData,
+            (data) => {
+                const formattedData = data.map((item, idx) => {
+                    return ({key: idx, value: item.sub_category_one});
+                });
+                this.setState({subCatListOne: formattedData});
+            }
+        );
         this.setState({
             selectedCategory: e.target.value,
             selectedSubCatOne: "none",
+            subCatListOne: [{key: 0, value: "none"}],
             selectedSubCatTwo: "none",
-            selectedSubCatThree: "none"
-            //subCatListOne: [{key: 0, value: "sub 1"}, {key: 1, value: "sub 2"}, {key: 2, value: "sub 3"}, {key: 3, value: "sub 4"}]
-            // here depending on the category chosen will query the database for this list.
+            subCatListTwo: [{key: 0, value: "none"}],
+            selectedSubCatThree: "none",
+            subCatListThree: [{key: 0, value: "none"}],
         });
     }
     handleSubCatOneChange(e) {
@@ -100,11 +105,19 @@ export default class SearchWrapper extends React.Component{
             selectedCategory: this.state.selectedCategory,
             selectedSubCategory: e.target.value
         }
-        this.serverDataRequest("/subCatSelect", searchData, (data) => {this.setState({subCatListTwo: data})});
+        this.serverDataRequest("/subCatSelect", searchData,
+            (data) => {
+                const formattedData = data.map((item, idx) => {
+                    return ({key: idx, value: item.sub_category_two});
+                });
+                this.setState({subCatListTwo: formattedData});
+            }
+        );
         this.setState({
             selectedSubCatOne: e.target.value,
             selectedSubCatTwo: "none",
-            selectedSubCatThree: "none"
+            selectedSubCatThree: "none",
+            subCatListThree: [{key: 0, value: "none"}],
             //subCatListTwo: [{key: 0, value: "sub2 1"}, {key: 1, value: "sub2 2"}, {key: 2, value: "sub2 3"}, {key: 3, value: "sub2 4"}]
         });
     }
@@ -115,7 +128,14 @@ export default class SearchWrapper extends React.Component{
             selectedSubCategory: this.state.selectedSubCatOne,
             selectedSubCatTwo: e.target.value
         }
-        this.serverDataRequest("/filterOneSelect", searchData, (data) => {this.setState({subCatListThree: data})});
+        this.serverDataRequest("/filterOneSelect", searchData,
+            (data) => {
+                const formattedData = data.map((item, idx) => {
+                    return ({key: idx, value: item.sub_category_three});
+                });
+                this.setState({subCatListThree: formattedData});
+            }
+        );
         this.setState({
             selectedSubCatTwo: e.target.value,
             //subCatListThree: [{key: 0, value: "sub3 1"}, {key: 1, value: "sub3 2"}, {key: 2, value: "sub3 3"}, {key: 3, value: "sub3 4"}]
