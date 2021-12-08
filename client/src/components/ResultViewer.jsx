@@ -9,13 +9,13 @@ function ResultViewer(props) {
     function item(item){
         return (
             <ItemCard
-                // key={item.id} //! only effective once data is coming from database
+                key={item.id} //! only effective once data is coming from database
                 imageurl={item.img_link}
                 headline={item.headline}
                 category={item.category ? item.category : ""}
-                subCatOne={item.subCategorys && item.subCategorys.length > 0 ? item.subCategorys[0] : ""}
-                subCatTwo={item.subCategorys && item.subCategorys.length > 1 ? item.subCategorys[1] : ""}
-                subCatThree={item.subCategorys && item.subCategorys.length > 2 ? item.subCategorys[2] : ""}
+                subCatOne={item.sub_category_one ? item.sub_category_one : ""}
+                subCatTwo={item.sub_category_two ? item.sub_category_two : ""}
+                subCatThree={item.sub_category_three ? item.sub_category_three : ""}
                 manufacturer={item.manufacturer}
                 price={item.price}
                 itemId={item.plattItemId}

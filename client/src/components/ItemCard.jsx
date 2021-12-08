@@ -5,14 +5,16 @@ function ItemCard(props) {
         <div className="itemCard">
             <img className="itemImg" src={props.imageurl} alt="productImage"/>
             <h3 className="itemHeadline">{props.headline}</h3>
-            <p className="categoryList">{props.category} > {props.subCatOne} > {props.subCatTwo} > {props.subCatThree}</p>
-            <p className="itemManufacturer">{props.manufacturer}</p>
-            <p className="itemPrice">{props.price}</p>
-            <p className="itemId">{props.itemId}</p>
-            <p className="detailDescription">{props.detailDescription}</p>
-            <p className="alsoKnownAs">{props.alsoKnownAs}</p>
-            <p className="upc">{props.upc}</p>
-            <p className="updatedDate">{props.dateUpdated}</p>
+            <ul>
+                <li className="categoryList"><span className="li_label">Categorys:</span> {props.category} {'>'} {props.subCatOne} {'>'} {props.subCatTwo} {'>'} {props.subCatThree}</li>
+                <li className="itemManufacturer"><span className="li_label">Manufacturer:</span> {props.manufacturer}</li>
+                <li className="itemPrice"><span className="li_label">Price:</span> {props.price}</li>
+                <li className="itemId"><span className="li_label">Item id:</span> {props.itemId}</li>
+                <li className="detailDescription"><span className="li_label">Description:</span> {props.detailDescription}</li>
+                <li className="alsoKnownAs"><span className="li_label">Also known as:</span> {props.alsoKnownAs}</li>
+                <li className="upc"><span className="li_label">upc:</span> {props.upc}</li>
+                <li className="updatedDate"><span className="li_label">last updated:</span> {props.dateUpdated}</li>
+            </ul>
         </div>
     )
 }
