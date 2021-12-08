@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("./db.js").pool;
 const { pool } = require('./db.js');
+const { getTable, sqlCheck } = require('./helpers.js');
 //const plattItm = require("./db.js").plattItm;
 
 const app = express();
@@ -10,23 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 const port = process.env.port || 3095;
 
-function getTable(vendor) {
-    let table;
-    switch (vendor) {
-        case "Platt":
-            table = 'platt_products';
-            break;
-        case "Home Depot":
-            table = 'platt_products'; // change this once scraper for home depot is done
-            break;
-        case "Bell Electric":
-            table = 'platt_products'; // change this once scraper for bell is done.
-        default:
-            table = 'platt_products';
-            break;
-    }
-    return table;
-}
+
 // connect to database.
 // post route for sql query
 // post route for filter querys
@@ -34,13 +19,35 @@ app.get("/", (req, res) => {
     res.send("server is working");
 });
 
-app.post("/sqlQuery", (req, res) => {
-    let sql = req.body.sql-input;
+app.post("/sqlQuery", async (req, res) => {
+    const sql = req.body.sqlInput;
+    console.log(sql);
+    if (!sqlCheck(sql)) {
+        console.log("sql check did not pass. Illegal variable included in query");
+        res.json({error: "The sql included an illegal variable", message: "The request included an illegal request. (DELETE, INSERT, CREATE, ALTER, DROP) are not allowed queries. please try again."});
+        return ;
+    }
+    try {
+        mysql.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                res.json({error: err.sqlMessage, message: "sql query error"});
+            }
+            else {
+                console.log(result.length);
+                res.send(JSON.stringify(result));
+            }
+        });
+    }
+    catch(e) {
+        console.log(e);
+        res.json({error: e, message: "database query error"});
+    }
 });
 
+
+
 app.post("/search", (req, res) => {
-    //! verify nothing in the query that shouldn't be (DELETE, INSERT, CREATE, ALTER, DROP)
-    //! especially check req.body.vendor for mallicious intent.
     const category = req.body.category ? req.body.category : "*";
     const subCat = req.body.subCat ? req.body.subCat : "*";
     const subCatTwo = req.body.subCatTwo ? req.body.subCatTwo : "*";
@@ -49,7 +56,10 @@ app.post("/search", (req, res) => {
     let sql = "SELECT * FROM " + getTable(req.body.vendor) + " WHERE category=? AND sub_category_one=? AND sub_category_two=? AND sub_category_three=? AND (headline LIKE ? OR description LIKE ? OR also_known_as LIKE ?);";
     let testsql = "SELECT * FROM " + getTable(req.body.vendor) + " WHERE category='"+ category +"' AND sub_category_one='"+ subCat+ "' AND sub_category_two='" + subCatTwo + "' AND sub_category_three='" + subCatThree + "' AND (headline LIKE'" + nameSearch + "' OR description LIKE '" + nameSearch + "' OR also_known_as LIKE '" + nameSearch + "');";
     console.log(testsql);
-    sql;
+    if (!sqlCheck(sql)) {
+        console.log("sql check did not pass. Illegal variable included in query");
+        res.json({error: "The sql included an illegal variable", message: "The request included an illegal request. please try again."});
+    }
     mysql.query(sql, [category, subCat, subCatTwo, subCatThree, nameSearch, nameSearch, nameSearch], (err, result) => {
         if (err) {
             console.log(err);

@@ -26,6 +26,8 @@ export default class SearchWrapper extends React.Component{
             subCatListThree: [{key: 0, value: "none"}],
 
             nameSearch: "",
+            
+            sqlSearch: "",
 
             data: []
         };
@@ -36,7 +38,8 @@ export default class SearchWrapper extends React.Component{
         this.handleSubCatThreeChange = this.handleSubCatThreeChange.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        
+        this.handleSqlChange = this.handleSqlChange.bind(this);
+        this.handleSqlSubmit = this.handleSqlSubmit.bind(this);
     }
 
     serverDataRequest = async (route, queryInputs, setStateFunc) => {
@@ -55,6 +58,11 @@ export default class SearchWrapper extends React.Component{
                 };
         const response = await fetch(route , options);
         const body = await response.json();
+        if (body.message) {
+            console.log("message exists");
+            alert("the search you just tried to perform failed.\n" + body.message + "\n" + body.error);
+            return ;
+        }
         setStateFunc(body);
     }
 
@@ -152,6 +160,23 @@ export default class SearchWrapper extends React.Component{
         });
     }
 
+    handleSqlChange(e) {
+        console.log(e.target.value);
+        this.setState({
+            sqlSearch: e.target.value
+        });
+    }
+
+    handleSqlSubmit(e) {
+        e.preventDefault();
+        console.log("sql query is running");
+        console.log(e.target.value);
+        const queryData = {
+            sqlInput: this.state.sqlSearch
+        };
+        this.serverDataRequest("/sqlQuery", queryData, (data) => {this.setState({data: data})});
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         console.log("submit button was pressed.");
@@ -172,7 +197,11 @@ export default class SearchWrapper extends React.Component{
         return (
             <div className="searchWrapper">
             <form>
-                <QueryForm name="Matthew Vogee"/>
+                <QueryForm sql={this.state.sqlSearch} onChange={this.handleSqlChange}/>
+                <button type="submit" onClick={this.handleSqlSubmit}><span>Run Query</span></button>
+            </form>
+            <form>
+                
                 <Select
                     label="Vendor"
                     selectName="vendorList"
