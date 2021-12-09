@@ -29,7 +29,7 @@ export default class SearchWrapper extends React.Component{
             
             sqlSearch: "",
 
-            data: []
+            data: {numResults: 0, results: []}
         };
         this.handleVendorChange = this.handleVendorChange.bind(this);
         this.handleCatChange = this.handleCatChange.bind(this);
@@ -63,6 +63,7 @@ export default class SearchWrapper extends React.Component{
             alert("the search you just tried to perform failed.\n" + body.message + "\n" + body.error);
             return ;
         }
+        console.log(body);
         setStateFunc(body);
     }
 
@@ -246,7 +247,7 @@ export default class SearchWrapper extends React.Component{
             </form>
             <div className="results">
                 <ResultViewer data={this.state.data} />
-                <span>results: {this.state.data.length}</span>
+                <span>results: {this.state.data.numResults}</span>
             </div>
             </div>
         )

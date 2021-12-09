@@ -34,12 +34,14 @@ app.post("/sqlQuery", async (req, res) => {
                 res.json({error: err.sqlMessage, message: "sql query error"});
             }
             else {
+                let responseObj = {numResults: result.length, results: result}
                 console.log(result.length);
                 if (result.length > 100) {
-                    res.send(JSON.stringify(result.slice(0, 25)));
+                    responseObj.results = result.slice(0, 50);
+                    res.send(JSON.stringify(responseObj));
                 }
                 else {
-                    res.send(JSON.stringify(result));
+                    res.send(JSON.stringify(responseObj));
                 }
             }
         });
@@ -72,12 +74,16 @@ app.post("/search", (req, res) => {
             console.log(err);
             res.json({error: err, message: "database error"});
         }
-        console.log(result.length);
-        if (result.length > 100) {
-            res.send(JSON.stringify(result.slice(0, 25)));
-        }
         else {
-            res.send(JSON.stringify(result));
+            let responseObj = {numResults: result.length, results: result}
+            console.log(result.length);
+            if (result.length > 100) {
+                responseObj.results = result.slice(0, 50);
+                res.send(JSON.stringify(responseObj));
+            }
+            else {
+                res.send(JSON.stringify(responseObj));
+            }
         }
         
     });
