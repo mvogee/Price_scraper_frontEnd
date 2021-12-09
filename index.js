@@ -35,7 +35,12 @@ app.post("/sqlQuery", async (req, res) => {
             }
             else {
                 console.log(result.length);
-                res.send(JSON.stringify(result));
+                if (result.length > 100) {
+                    res.send(JSON.stringify(result.slice(0, 25)));
+                }
+                else {
+                    res.send(JSON.stringify(result));
+                }
             }
         });
     }
@@ -68,7 +73,13 @@ app.post("/search", (req, res) => {
             res.json({error: err, message: "database error"});
         }
         console.log(result.length);
-        res.send(JSON.stringify(result));
+        if (result.length > 100) {
+            res.send(JSON.stringify(result.slice(0, 25)));
+        }
+        else {
+            res.send(JSON.stringify(result));
+        }
+        
     });
 });
 
