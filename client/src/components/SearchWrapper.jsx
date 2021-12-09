@@ -29,7 +29,8 @@ export default class SearchWrapper extends React.Component{
             
             sqlSearch: "",
 
-            data: {numResults: 0, results: []}
+            data: {numResults: 0, results: []},
+            resultPage: 1
         };
         this.handleVendorChange = this.handleVendorChange.bind(this);
         this.handleCatChange = this.handleCatChange.bind(this);
@@ -40,6 +41,8 @@ export default class SearchWrapper extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSqlChange = this.handleSqlChange.bind(this);
         this.handleSqlSubmit = this.handleSqlSubmit.bind(this);
+        this.nextResults = this.nextResults.bind(this);
+        this.prevResults = this.prevResults.bind(this);
     }
 
     serverDataRequest = async (route, queryInputs, setStateFunc) => {
@@ -175,8 +178,10 @@ export default class SearchWrapper extends React.Component{
         e.preventDefault();
         console.log("sql query is running");
         console.log(e.target.value);
+        this.setState({resultPage: 1});
         const queryData = {
-            sqlInput: this.state.sqlSearch
+            sqlInput: this.state.sqlSearch,
+            resultPage: this.state.resultPage
         };
         this.serverDataRequest("/sqlQuery", queryData, (data) => {this.setState({data: data})});
     }
@@ -184,18 +189,29 @@ export default class SearchWrapper extends React.Component{
     handleSubmit(e) {
         e.preventDefault();
         console.log("submit button was pressed.");
+        this.setState({resultPage: 1});
         const queryData = {
             vendor: this.state.selectedVendor,
             category: this.state.selectedCategory,
             subCat: this.state.selectedSubCatOne,
             subCatTwo: this.state.selectedSubCatTwo,
             subCatThree: this.state.selectedSubCatThree,
-            nameSearch: this.state.nameSearch
+            nameSearch: this.state.nameSearch,
+            resultPage: this.state.resultPage
         }
         //console.log(queryData);
+        
         this.serverDataRequest("/search", queryData, (data) => {this.setState({data: data})});
         // query database for results based off of these states. if a state is not set should be * in query
     }
+
+    prevResults(e) {
+        this.setState((prevState) => ({resultPage: prevState.resultPage - 1}));
+    }
+    nextResults(e) {
+        this.setState((prevState) => ({resultPage: prevState.resultPage + 1}));
+    }
+
     render() {
         console.log(this.props);
         return (
@@ -248,6 +264,8 @@ export default class SearchWrapper extends React.Component{
             <div className="results">
                 <ResultViewer data={this.state.data} />
                 <span>results: {this.state.data.numResults}</span>
+                {this.state.resultPage > 1 ? <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
+                {this.state.data.numResults - (50 * this.state.resultPage) > 0 ? <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
             </div>
             </div>
         )
