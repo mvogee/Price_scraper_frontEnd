@@ -13,17 +13,17 @@ export default class SearchWrapper extends React.Component{
             selectedVendor: this.props.vendors[0].value,
             vendorList: this.props.vendors,
 
-            selectedCategory: [{key: 0, value: "none"}],
-            categoryList: [{key: 0, value: "none"}],
+            selectedCategory: "none",
+            categoryList: [],
 
-            selectedSubCatOne: {key: 0, value: "none"},
-            subCatListOne: [{key: 0, value: "none"}],
+            selectedSubCatOne: "none",
+            subCatListOne: [],
 
-            selectedSubCatTwo: {key: 0, value: "none"},
-            subCatListTwo: [{key: 0, value: "none"}],
+            selectedSubCatTwo: "none",
+            subCatListTwo: [],
 
-            selectedSubCatThree: {key: 0, value: "none"},
-            subCatListThree: [{key: 0, value: "none"}],
+            selectedSubCatThree: "none",
+            subCatListThree: [],
 
             nameSearch: "",
             
@@ -80,8 +80,11 @@ export default class SearchWrapper extends React.Component{
             selectedVendor: e.target.value,
             selectedCategory: "none",
             selectedSubCatOne: "none",
+            subCatListOne: [],
             selectedSubCatTwo: "none",
-            selectedSubCatThree: "none"
+            subCatListTwo: [],
+            selectedSubCatThree: "none",
+            subCatListThree: [],
         });
     }
     handleCatChange(e) {
@@ -100,11 +103,11 @@ export default class SearchWrapper extends React.Component{
         this.setState({
             selectedCategory: e.target.value,
             selectedSubCatOne: "none",
-            subCatListOne: [{key: 0, value: "none"}],
+            subCatListOne: [],
             selectedSubCatTwo: "none",
-            subCatListTwo: [{key: 0, value: "none"}],
+            subCatListTwo: [],
             selectedSubCatThree: "none",
-            subCatListThree: [{key: 0, value: "none"}],
+            subCatListThree: [],
         });
     }
     handleSubCatOneChange(e) {
@@ -125,7 +128,7 @@ export default class SearchWrapper extends React.Component{
             selectedSubCatOne: e.target.value,
             selectedSubCatTwo: "none",
             selectedSubCatThree: "none",
-            subCatListThree: [{key: 0, value: "none"}],
+            subCatListThree: [],
             //subCatListTwo: [{key: 0, value: "sub2 1"}, {key: 1, value: "sub2 2"}, {key: 2, value: "sub2 3"}, {key: 3, value: "sub2 4"}]
         });
     }
@@ -243,6 +246,7 @@ export default class SearchWrapper extends React.Component{
             </form>
             <div className="results">
                 <ResultViewer data={this.state.data} />
+                <span>results: {this.state.data.length}</span>
             </div>
             </div>
         )

@@ -18,9 +18,9 @@ function ResultViewer(props) {
                 subCatThree={item.sub_category_three ? item.sub_category_three : ""}
                 manufacturer={item.manufacturer}
                 price={item.price}
-                itemId={item.plattItemId}
-                detailDescription={item.detailDescription}
-                alsoKnownAs={item.alsoKnownAs}
+                itemId={item.platt_id}
+                detailDescription={item.description}
+                alsoKnownAs={item.also_known_as}
                 upc={item.upc}
                 dateUpdated={item.date_updated}
             />
