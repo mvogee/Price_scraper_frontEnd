@@ -3,7 +3,6 @@ import React from "react";
 export default class Select extends React.Component {
 
     selectOptions(option, idx) {
-        console.log(option);
         if (!option.value) {
             return ;
         }

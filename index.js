@@ -21,6 +21,8 @@ app.get("/", (req, res) => {
 
 app.post("/sqlQuery", async (req, res) => {
     const sql = req.body.sqlInput;
+    const resultsPerPage = req.body.resultsPerPage;
+    const totalResults = req.body.resultPage * resultsPerPage;
     console.log(sql);
     if (!sqlCheck(sql)) {
         console.log("sql check did not pass. Illegal variable included in query");
@@ -36,8 +38,8 @@ app.post("/sqlQuery", async (req, res) => {
             else {
                 let responseObj = {numResults: result.length, results: result}
                 console.log(result.length);
-                if (result.length > 100) {
-                    responseObj.results = result.slice(0, 50);
+                if (result.length > resultsPerPage) {
+                    responseObj.results = result.slice(totalResults - resultsPerPage, totalResults);
                     res.send(JSON.stringify(responseObj));
                 }
                 else {
@@ -60,8 +62,11 @@ app.post("/search", (req, res) => {
     const subCatTwo = req.body.subCatTwo && req.body.subCatTwo !== "none" ? req.body.subCatTwo : null;
     const subCatThree = req.body.subCatThree && req.body.subCatThree !== "none" ? req.body.subCatThree : null;
     const nameSearch = req.body.nameSearch ? "%" + req.body.nameSearch + "%" : null;
+    const resultsPerPage = req.body.resultsPerPage;
+    const totalResults = req.body.resultPage * resultsPerPage;
+    console.log(req.body);
+    
     let sqlObj = createSqlQuery(req.body.vendor, category, subCat, subCatTwo, subCatThree, nameSearch);
-    //"SELECT * FROM " + getTable(req.body.vendor) + " WHERE category=? AND sub_category_one=? AND sub_category_two=? AND sub_category_three=? AND (headline LIKE ? OR description LIKE ? OR also_known_as LIKE ?);";
     let testsql = "SELECT * FROM " + getTable(req.body.vendor) + " WHERE category='"+ category +"' AND sub_category_one='"+ subCat+ "' AND sub_category_two='" + subCatTwo + "' AND sub_category_three='" + subCatThree + "' AND (headline LIKE'" + nameSearch + "' OR description LIKE '" + nameSearch + "' OR also_known_as LIKE '" + nameSearch + "');";
     console.log(sqlObj.sql);
     console.log(testsql);
@@ -77,8 +82,10 @@ app.post("/search", (req, res) => {
         else {
             let responseObj = {numResults: result.length, results: result}
             console.log(result.length);
-            if (result.length > 100) {
-                responseObj.results = result.slice(0, 50);
+            if (result.length > resultsPerPage) {
+                console.log(totalResults - resultsPerPage);
+                console.log(totalResults);
+                responseObj.results = result.slice(totalResults - resultsPerPage, totalResults);
                 res.send(JSON.stringify(responseObj));
             }
             else {

@@ -30,7 +30,12 @@ export default class SearchWrapper extends React.Component{
             sqlSearch: "",
 
             data: {numResults: 0, results: []},
-            resultPage: 1
+            resultPage: 1,
+            lastSubmittedReq: {
+                searchType: "form",
+                resultPage: 1
+            },
+            resultsPerPage: 50
         };
         this.handleVendorChange = this.handleVendorChange.bind(this);
         this.handleCatChange = this.handleCatChange.bind(this);
@@ -62,11 +67,9 @@ export default class SearchWrapper extends React.Component{
         const response = await fetch(route , options);
         const body = await response.json();
         if (body.message) {
-            console.log("message exists");
             alert("the search you just tried to perform failed.\n" + body.message + "\n" + body.error);
             return ;
         }
-        console.log(body);
         setStateFunc(body);
     }
 
@@ -168,7 +171,6 @@ export default class SearchWrapper extends React.Component{
     }
 
     handleSqlChange(e) {
-        console.log(e.target.value);
         this.setState({
             sqlSearch: e.target.value
         });
@@ -176,44 +178,67 @@ export default class SearchWrapper extends React.Component{
 
     handleSqlSubmit(e) {
         e.preventDefault();
-        console.log("sql query is running");
-        console.log(e.target.value);
-        this.setState({resultPage: 1});
         const queryData = {
+            searchType: "sql",
             sqlInput: this.state.sqlSearch,
-            resultPage: this.state.resultPage
+            resultPage: 1,
+            resultsPerPage: this.state.resultsPerPage
         };
+        this.setState({
+            resultPage: 1,
+            lastSubmittedReq: queryData
+        });
         this.serverDataRequest("/sqlQuery", queryData, (data) => {this.setState({data: data})});
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log("submit button was pressed.");
-        this.setState({resultPage: 1});
         const queryData = {
+            searchType: "form",
             vendor: this.state.selectedVendor,
             category: this.state.selectedCategory,
             subCat: this.state.selectedSubCatOne,
             subCatTwo: this.state.selectedSubCatTwo,
             subCatThree: this.state.selectedSubCatThree,
             nameSearch: this.state.nameSearch,
-            resultPage: this.state.resultPage
+            resultPage: 1,
+            resultsPerPage: this.state.resultsPerPage
         }
-        //console.log(queryData);
+        this.setState({
+            resultPage: 1,
+            lastSubmittedReq: queryData
+        });
         
         this.serverDataRequest("/search", queryData, (data) => {this.setState({data: data})});
         // query database for results based off of these states. if a state is not set should be * in query
     }
 
-    prevResults(e) {
+    prevResults() {
         this.setState((prevState) => ({resultPage: prevState.resultPage - 1}));
+        let searchData = Object.assign({}, this.state.lastSubmittedReq);
+        searchData.resultPage = this.state.resultPage;
+        if (this.state.lastSubmittedReq.searchType === "form") {
+            this.serverDataRequest("/search", searchData, (data) => {this.setState({data: data})});
+        }
+        else {
+            this.serverDataRequest("/sqlQuery", searchData, (data) => {this.setState({data: data})});
+        }
     }
-    nextResults(e) {
+    nextResults() {
         this.setState((prevState) => ({resultPage: prevState.resultPage + 1}));
+        let searchData = Object.assign({}, this.state.lastSubmittedReq);
+        searchData.resultPage = this.state.resultPage;
+        console.log("searchData");
+        console.log(searchData);
+        if (this.state.lastSubmittedReq.searchType === "form") {
+            this.serverDataRequest("/search", searchData, (data) => {this.setState({data: data})});
+        }
+        else {
+            this.serverDataRequest("/sqlQuery", searchData, (data) => {this.setState({data: data})});
+        }
     }
 
     render() {
-        console.log(this.props);
         return (
             <div className="searchWrapper">
             <form>
@@ -265,7 +290,8 @@ export default class SearchWrapper extends React.Component{
                 <ResultViewer data={this.state.data} />
                 <span>results: {this.state.data.numResults}</span>
                 {this.state.resultPage > 1 ? <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
-                {this.state.data.numResults - (50 * this.state.resultPage) > 0 ? <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
+                {console.log(this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage))}
+                {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) + this.state.data.numResults > 0 ? <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
             </div>
             </div>
         )
