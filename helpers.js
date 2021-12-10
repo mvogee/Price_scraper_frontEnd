@@ -19,7 +19,7 @@
       }
 
     function sqlCheck(sql) {
-        let re = /DELETE|INSERT|CREATE|ALTER|DROP/ig;
+        let re = /DELETE|CREATE|ALTER|DROP/ig;
         if (sql.match(re)) {
             return (false);
         }
@@ -44,12 +44,12 @@
                     if (subCatThree) {
                         sqlObj.sql += " AND sub_category_three=?";
                         sqlObj.params.push(subCatThree);
-                        if (nameSearch) {
-                            sqlObj.sql +=  " AND (headline LIKE ? OR description LIKE ? OR also_known_as LIKE ?)";
-                            sqlObj.params.push(nameSearch, nameSearch, nameSearch);
-                        }
                     }
                 } 
+            }
+            if (nameSearch) {
+                sqlObj.sql +=  " AND (headline LIKE ? OR description LIKE ? OR also_known_as LIKE ?)";
+                sqlObj.params.push(nameSearch, nameSearch, nameSearch);
             }
         }
         // if category was not picked only nameSearch may have been used. check it.

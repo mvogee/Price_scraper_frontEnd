@@ -1,4 +1,5 @@
 import React from "react";
+import "./Select.css";
 
 export default class Select extends React.Component {
 
@@ -11,7 +12,7 @@ export default class Select extends React.Component {
 
     render() {
         return (
-            <div className="select">
+            <div className="Select">
                 <label htmlFor={this.props.selectName}>{this.props.label}</label>
                 <select name={this.props.selectName} value={this.props.selected.value} onChange={this.props.onChange}>
                     <option className="list-item defualt" value="none" default>none</option>

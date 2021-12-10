@@ -1,0 +1,52 @@
+.ItemCard {
+    box-shadow: 2px 2px 20px var(--blue) ;
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    background-color: var(--dark-blue);
+    width: 450px;
+    padding: 20px;
+    height: fit-content;
+    cursor: grab;
+}
+
+.ItemCard .heading {
+    display: flex;
+    align-items: center;
+}
+
+.ItemCard .itemImg {
+    margin: 0 15px 0 0;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: var(--black-blue);
+    border-width: 3px;
+}
+
+.ItemCard h3 {
+    margin: 0;
+    font-size: 1em;
+}
+
+.ItemCard ul {
+    padding: 0;
+    list-style: none;
+    font-weight: normal;
+}
+.ItemCard li {
+    margin-top: 10px;
+    font-size: .7em;
+    line-height: 1.2;
+}
+.ItemCard .li_label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.ItemCard .detailsHidden {
+    display: none;
+}
+
+.ItemCard .detailsShown {
+    display: block;
+}

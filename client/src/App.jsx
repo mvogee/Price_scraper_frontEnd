@@ -3,12 +3,12 @@ import './App.css';
 import SearchWrapper from './components/SearchWrapper';
 
 function App() {
-const vendors = [{key: 0, value: "Platt"}, {key: 1, value: "Home Depot"}, {key: 2, value: "Bell Electric"}];
+const vendors = [{key: 0, value: "Platt"}];
   return (
     <div className="App">
       <header className="App-header">
-      <SearchWrapper vendors={vendors}/>
       </header>
+      <SearchWrapper vendors={vendors}/>
     </div>
   );
 }

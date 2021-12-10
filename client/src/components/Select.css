@@ -1,0 +1,6 @@
+.Select label {
+    font-size: .8em;
+}
+.Select select {
+    display: block;
+}

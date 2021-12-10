@@ -1,5 +1,6 @@
 import React from "react";
 import ItemCard from "./ItemCard";
+import "./ResultViewer.css";
 export default ResultViewer;
 
 // getData should take a queryString and do a fetch request to the server to aquire data
@@ -28,7 +29,7 @@ function ResultViewer(props) {
     }
 
     return (
-        <div className="resultViewer">
+        <div className="ResultViewer">
             {props.data.results.map(item)}
             {/* should make a way to only display up to 50 results on one page at a time for large datasets */}
         </div>

@@ -1,0 +1,43 @@
+.SearchWrapper {
+    padding: 40px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.SearchWrapper form {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.submit_btn {
+    align-self: center;
+    margin-top: 20px;
+    display: block;
+    width: 245px;
+    background-color: var(--light-blue);
+    color: var(--white);
+    padding: 10px 60px;
+    border: none;
+    border-radius: 2px;
+}
+
+.SearchWrapper .results-info {
+    display: block;
+    text-align: center;
+}
+
+.SearchWrapper .results-info button {
+    background-color: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: 2px;
+    padding: 5px 10px;
+}
+
+.SearchWrapper .nextPrevBtns {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}

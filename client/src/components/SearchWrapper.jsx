@@ -2,6 +2,7 @@ import React from "react";
 import QueryForm from "./SqlQueryForm";
 import Select from "./Select";
 import ResultViewer from "./ResultViewer";
+import "./SearchWrapper.css"
 
 
 
@@ -242,13 +243,12 @@ export default class SearchWrapper extends React.Component{
 
     render() {
         return (
-            <div className="searchWrapper">
+            <div className="SearchWrapper">
             {/* <form>
                 <QueryForm sql={this.state.sqlSearch} onChange={this.handleSqlChange}/>
                 <button type="submit" onClick={this.handleSqlSubmit}><span>Run Query</span></button>
             </form> */}
             <form>
-                
                 <Select
                     label="Vendor"
                     selectName="vendorList"
@@ -271,14 +271,14 @@ export default class SearchWrapper extends React.Component{
                     optionList={this.state.subCatListOne}
                 />
                 <Select
-                    label="Filter 1"
+                    label="Filter"
                     selectName="filterOne"
                     selected={this.state.selectedSubCatTwo}
                     onChange={this.handleSubCatTwoChange}
                     optionList={this.state.subCatListTwo}
                 />
                 <Select
-                    label="filter 2"
+                    label="Sub Filter"
                     selectName="filterTwo"
                     selected={this.state.selectedSubCatThree}
                     onChange={this.handleSubCatThreeChange}
@@ -286,15 +286,23 @@ export default class SearchWrapper extends React.Component{
                 />
                  <label htmlFor="nameSearch">Search</label>
                 <input name="nameSearch" type="text" value={this.state.nameSearch} onChange={this.handleSearchChange} placeholder="Search term"></input>
-                <button type="submit" value="submit" onClick={this.handleSubmit}>Search</button>
+                <button className="submit_btn" type="submit" value="submit" onClick={this.handleSubmit}>Search</button>
             </form>
+            <div className="results-info">
+                    {this.state.data.numResults ?
+                    <p><span className="resultnumStart">{(this.state.resultsPerPage * this.state.resultPage) - this.state.resultsPerPage} - {this.state.resultsPerPage * this.state.resultPage < this.state.data.numResults ?
+                    this.state.resultsPerPage * this.state.resultPage : this.state.data.numResults}</span>
+                     / <span className="resultnumEnd">{this.state.data.numResults}</span></p> : ""}
+                    <div className="nextPrevBtns">
+                        {this.state.resultPage > 1 ?
+                        <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
+                        {console.log(this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage))}
+                        {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) > 0 ?
+                        <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
+                    </div>
+                </div>
             <div className="results">
                 <ResultViewer data={this.state.data} />
-                {this.state.data.numResults ? <p><span>results:{(this.state.resultsPerPage * this.state.resultPage) - this.state.resultsPerPage} - {this.state.resultsPerPage * this.state.resultPage < this.state.data.numResults ? this.state.resultsPerPage * this.state.resultPage : this.state.data.numResults}</span> / <span>{this.state.data.numResults}</span></p> : ""}
-                <p></p>
-                {this.state.resultPage > 1 ? <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
-                {console.log(this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage))}
-                {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) > 0 ? <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
             </div>
             </div>
         )
