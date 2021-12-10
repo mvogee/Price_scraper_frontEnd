@@ -83,8 +83,6 @@ app.post("/search", (req, res) => {
             let responseObj = {numResults: result.length, results: result}
             console.log(result.length);
             if (result.length > resultsPerPage) {
-                console.log(totalResults - resultsPerPage);
-                console.log(totalResults);
                 responseObj.results = result.slice(totalResults - resultsPerPage, totalResults);
                 res.send(JSON.stringify(responseObj));
             }

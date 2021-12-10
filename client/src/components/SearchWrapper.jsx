@@ -216,7 +216,9 @@ export default class SearchWrapper extends React.Component{
     prevResults() {
         this.setState((prevState) => ({resultPage: prevState.resultPage - 1}));
         let searchData = Object.assign({}, this.state.lastSubmittedReq);
-        searchData.resultPage = this.state.resultPage;
+        searchData.resultPage = this.state.resultPage - 1;
+        console.log("searchData");
+        console.log(searchData);
         if (this.state.lastSubmittedReq.searchType === "form") {
             this.serverDataRequest("/search", searchData, (data) => {this.setState({data: data})});
         }
@@ -227,7 +229,7 @@ export default class SearchWrapper extends React.Component{
     nextResults() {
         this.setState((prevState) => ({resultPage: prevState.resultPage + 1}));
         let searchData = Object.assign({}, this.state.lastSubmittedReq);
-        searchData.resultPage = this.state.resultPage;
+        searchData.resultPage = this.state.resultPage + 1;
         console.log("searchData");
         console.log(searchData);
         if (this.state.lastSubmittedReq.searchType === "form") {
@@ -241,10 +243,10 @@ export default class SearchWrapper extends React.Component{
     render() {
         return (
             <div className="searchWrapper">
-            <form>
+            {/* <form>
                 <QueryForm sql={this.state.sqlSearch} onChange={this.handleSqlChange}/>
                 <button type="submit" onClick={this.handleSqlSubmit}><span>Run Query</span></button>
-            </form>
+            </form> */}
             <form>
                 
                 <Select
@@ -288,10 +290,11 @@ export default class SearchWrapper extends React.Component{
             </form>
             <div className="results">
                 <ResultViewer data={this.state.data} />
-                <span>results: {this.state.data.numResults}</span>
+                {this.state.data.numResults ? <p><span>results:{(this.state.resultsPerPage * this.state.resultPage) - this.state.resultsPerPage} - {this.state.resultsPerPage * this.state.resultPage < this.state.data.numResults ? this.state.resultsPerPage * this.state.resultPage : this.state.data.numResults}</span> / <span>{this.state.data.numResults}</span></p> : ""}
+                <p></p>
                 {this.state.resultPage > 1 ? <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
                 {console.log(this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage))}
-                {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) + this.state.data.numResults > 0 ? <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
+                {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) > 0 ? <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
             </div>
             </div>
         )
