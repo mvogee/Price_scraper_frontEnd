@@ -55,3 +55,7 @@
 .SearchWrapper .nameSeachLabel {
     font-size: .7em;
 }
+
+.SearchWrapper .checkboxes label {
+    font-size: .7em;
+}

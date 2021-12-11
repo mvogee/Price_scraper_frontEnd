@@ -62,11 +62,13 @@ app.post("/search", (req, res) => {
     const subCatTwo = req.body.subCatTwo && req.body.subCatTwo !== "none" ? req.body.subCatTwo : null;
     const subCatThree = req.body.subCatThree && req.body.subCatThree !== "none" ? req.body.subCatThree : null;
     const nameSearch = req.body.nameSearch ? "%" + req.body.nameSearch + "%" : null;
+    const unpriced = req.body.unpriced;
+    const discontinued = req.body.discontinued;
     const resultsPerPage = req.body.resultsPerPage;
     const totalResults = req.body.resultPage * resultsPerPage;
     console.log(req.body);
     
-    let sqlObj = createSqlQuery(req.body.vendor, category, subCat, subCatTwo, subCatThree, nameSearch);
+    let sqlObj = createSqlQuery(req.body.vendor, category, subCat, subCatTwo, subCatThree, nameSearch, unpriced, discontinued);
     let testsql = "SELECT * FROM " + getTable(req.body.vendor) + " WHERE category='"+ category +"' AND sub_category_one='"+ subCat+ "' AND sub_category_two='" + subCatTwo + "' AND sub_category_three='" + subCatThree + "' AND (headline LIKE'" + nameSearch + "' OR description LIKE '" + nameSearch + "' OR also_known_as LIKE '" + nameSearch + "');";
     console.log(sqlObj.sql);
     console.log(testsql);

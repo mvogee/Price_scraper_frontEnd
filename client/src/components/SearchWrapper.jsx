@@ -36,7 +36,9 @@ export default class SearchWrapper extends React.Component{
                 searchType: "form",
                 resultPage: 1
             },
-            resultsPerPage: 50
+            resultsPerPage: 50,
+            includeDiscontinued: false,
+            includeUnpriced: true
         };
         this.handleVendorChange = this.handleVendorChange.bind(this);
         this.handleCatChange = this.handleCatChange.bind(this);
@@ -50,6 +52,7 @@ export default class SearchWrapper extends React.Component{
         this.nextResults = this.nextResults.bind(this);
         this.prevResults = this.prevResults.bind(this);
         this.scrollToTop = this.scrollToTop.bind(this);
+        this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
     }
 
     serverDataRequest = async (route, queryInputs, setStateFunc) => {
@@ -172,6 +175,14 @@ export default class SearchWrapper extends React.Component{
         });
     }
 
+    handleCheckBoxChange(e) {
+        const value = e.target.checked;
+        const name = e.target.name;
+        this.setState({
+            [name]: value
+        })
+    }
+
     handleSqlChange(e) {
         this.setState({
             sqlSearch: e.target.value
@@ -204,7 +215,9 @@ export default class SearchWrapper extends React.Component{
             subCatThree: this.state.selectedSubCatThree,
             nameSearch: this.state.nameSearch,
             resultPage: 1,
-            resultsPerPage: this.state.resultsPerPage
+            resultsPerPage: this.state.resultsPerPage,
+            discontinued: this.state.includeDiscontinued,
+            unpriced: this.state.includeUnpriced
         }
         this.setState({
             resultPage: 1,
@@ -294,6 +307,13 @@ export default class SearchWrapper extends React.Component{
                     />
                     <label className="nameSeachLabel" htmlFor="nameSearch">Search term</label>
                     <input name="nameSearch" type="text" value={this.state.nameSearch} onChange={this.handleSearchChange} placeholder="20 Amp"></input>
+                    <div className="checkboxes">
+                        <input name="includeDiscontinued" type="checkbox" checked={this.state.includeDiscontinued} onChange={this.handleCheckBoxChange}></input>
+                        <label className="checkboxLabel" htmlFor="includeDiscontinued"> Include discontinued products</label>
+                        <br/>
+                        <input name="includeUnpriced" type="checkbox" checked={this.state.includeUnpriced} onChange={this.handleCheckBoxChange}></input>
+                        <label className="checkboxLabel" htmlFor="includeUnpriced"> Include unpriced products</label>
+                    </div>
                     <button className="submit_btn" type="submit" value="submit" onClick={this.handleSubmit}>Search</button>
                 </form>
                 <div className="results-info">

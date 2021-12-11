@@ -26,14 +26,14 @@
         return (true);
     }
 
-    function createSqlQuery(vendor, category, subCat, subCatTwo, subCatThree, nameSearch) {
+    function createSqlQuery(vendor, category, subCat, subCatTwo, subCatThree, nameSearch, unpriced, discontinued) {
         let sqlObj = {
-            sql: "SELECT * FROM " + getTable(vendor),
+            sql: "SELECT * FROM " + getTable(vendor) + " WHERE id IS NOT NULL",
             params: []
         }
         // pursue down this tree if category exists only then can the below exist.
         if (category) {
-            sqlObj.sql += " WHERE category=?";
+            sqlObj.sql += " AND category=?";
             sqlObj.params.push(category);
             if (subCat) {
                 sqlObj.sql += " AND sub_category_one=?";
@@ -47,17 +47,19 @@
                     }
                 } 
             }
-            if (nameSearch) {
-                sqlObj.sql +=  " AND (headline LIKE ? OR description LIKE ? OR also_known_as LIKE ?)";
-                sqlObj.params.push(nameSearch, nameSearch, nameSearch);
-            }
         }
-        // if category was not picked only nameSearch may have been used. check it.
-        else if (nameSearch) {
-            sqlObj.sql += " WHERE (headline LIKE ? OR description LIKE ? OR also_known_as LIKE ?)";
+        if (!unpriced) {
+            sqlObj.sql += " AND price IS NOT NULL AND price != 'Call for Price800-257-5288Email Live Help' AND price != 'Call for Price800-257-5288Request Quote Live Help'";
+        }
+        if (!discontinued) {
+            sqlObj.sql += " AND price != 'Discontinued'";
+        }
+        if (nameSearch) {
+            sqlObj.sql += " AND (headline LIKE ? OR description LIKE ? OR also_known_as LIKE ?)";
             sqlObj.params.push(nameSearch, nameSearch, nameSearch);
         }
         sqlObj.sql += ";";
+        console.log(sqlObj.sql);
         return sqlObj;
     }
 
