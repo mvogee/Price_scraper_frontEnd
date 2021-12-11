@@ -1,5 +1,5 @@
 import React from "react";
-import QueryForm from "./SqlQueryForm";
+//import QueryForm from "./SqlQueryForm";
 import Select from "./Select";
 import ResultViewer from "./ResultViewer";
 import "./SearchWrapper.css"
@@ -49,6 +49,7 @@ export default class SearchWrapper extends React.Component{
         this.handleSqlSubmit = this.handleSqlSubmit.bind(this);
         this.nextResults = this.nextResults.bind(this);
         this.prevResults = this.prevResults.bind(this);
+        this.scrollToTop = this.scrollToTop.bind(this);
     }
 
     serverDataRequest = async (route, queryInputs, setStateFunc) => {
@@ -241,69 +242,77 @@ export default class SearchWrapper extends React.Component{
         }
     }
 
+    scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
     render() {
         return (
             <div className="SearchWrapper">
-            {/* <form>
-                <QueryForm sql={this.state.sqlSearch} onChange={this.handleSqlChange}/>
-                <button type="submit" onClick={this.handleSqlSubmit}><span>Run Query</span></button>
-            </form> */}
-            <form>
-                <Select
-                    label="Vendor"
-                    selectName="vendorList"
-                    selected={this.state.selectedVendor}
-                    onChange={this.handleVendorChange}
-                    optionList={this.state.vendorList}
-                />
-                <Select
-                    label="Category"
-                    selectName="categoryList"
-                    selected={this.state.selectedCategory}
-                    onChange={this.handleCatChange}
-                    optionList={this.state.categoryList}
-                />
-                <Select
-                    label="Sub Category"
-                    selectName="SubCategory"
-                    selected={this.state.selectedSubCatOne}
-                    onChange={this.handleSubCatOneChange}
-                    optionList={this.state.subCatListOne}
-                />
-                <Select
-                    label="Filter"
-                    selectName="filterOne"
-                    selected={this.state.selectedSubCatTwo}
-                    onChange={this.handleSubCatTwoChange}
-                    optionList={this.state.subCatListTwo}
-                />
-                <Select
-                    label="Sub Filter"
-                    selectName="filterTwo"
-                    selected={this.state.selectedSubCatThree}
-                    onChange={this.handleSubCatThreeChange}
-                    optionList={this.state.subCatListThree}
-                />
-                 <label htmlFor="nameSearch">Search</label>
-                <input name="nameSearch" type="text" value={this.state.nameSearch} onChange={this.handleSearchChange} placeholder="Search term"></input>
-                <button className="submit_btn" type="submit" value="submit" onClick={this.handleSubmit}>Search</button>
-            </form>
-            <div className="results-info">
-                    {this.state.data.numResults ?
-                    <p><span className="resultnumStart">{(this.state.resultsPerPage * this.state.resultPage) - this.state.resultsPerPage} - {this.state.resultsPerPage * this.state.resultPage < this.state.data.numResults ?
-                    this.state.resultsPerPage * this.state.resultPage : this.state.data.numResults}</span>
-                     / <span className="resultnumEnd">{this.state.data.numResults}</span></p> : ""}
-                    <div className="nextPrevBtns">
-                        {this.state.resultPage > 1 ?
-                        <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
-                        {console.log(this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage))}
-                        {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) > 0 ?
-                        <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
+                {/* <form>
+                    <QueryForm sql={this.state.sqlSearch} onChange={this.handleSqlChange}/>
+                    <button type="submit" onClick={this.handleSqlSubmit}><span>Run Query</span></button>
+                </form> */}
+                <form>
+                    <Select
+                        label="Vendor"
+                        selectName="vendorList"
+                        selected={this.state.selectedVendor}
+                        onChange={this.handleVendorChange}
+                        optionList={this.state.vendorList}
+                    />
+                    <Select
+                        label="Category"
+                        selectName="categoryList"
+                        selected={this.state.selectedCategory}
+                        onChange={this.handleCatChange}
+                        optionList={this.state.categoryList}
+                    />
+                    <Select
+                        label="Sub Category"
+                        selectName="SubCategory"
+                        selected={this.state.selectedSubCatOne}
+                        onChange={this.handleSubCatOneChange}
+                        optionList={this.state.subCatListOne}
+                    />
+                    <Select
+                        label="Filter"
+                        selectName="filterOne"
+                        selected={this.state.selectedSubCatTwo}
+                        onChange={this.handleSubCatTwoChange}
+                        optionList={this.state.subCatListTwo}
+                    />
+                    <Select
+                        label="Sub Filter"
+                        selectName="filterTwo"
+                        selected={this.state.selectedSubCatThree}
+                        onChange={this.handleSubCatThreeChange}
+                        optionList={this.state.subCatListThree}
+                    />
+                    <label className="nameSeachLabel" htmlFor="nameSearch">Search term</label>
+                    <input name="nameSearch" type="text" value={this.state.nameSearch} onChange={this.handleSearchChange} placeholder="20 Amp"></input>
+                    <button className="submit_btn" type="submit" value="submit" onClick={this.handleSubmit}>Search</button>
+                </form>
+                <div className="results-info">
+                        {this.state.data.numResults ?
+                        <p><span className="resultnumStart">{(this.state.resultsPerPage * this.state.resultPage) - this.state.resultsPerPage} - {this.state.resultsPerPage * this.state.resultPage < this.state.data.numResults ?
+                        this.state.resultsPerPage * this.state.resultPage : this.state.data.numResults}</span>
+                        / <span className="resultnumEnd">{this.state.data.numResults}</span></p> : ""}
+                        <div className="nextPrevBtns">
+                            {this.state.resultPage > 1 ?
+                            <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
+                            {console.log(this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage))}
+                            {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) > 0 ?
+                            <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
+                        </div>
                     </div>
+                <div className="results">
+                    <ResultViewer data={this.state.data} />
                 </div>
-            <div className="results">
-                <ResultViewer data={this.state.data} />
-            </div>
+                {this.state.data.numResults > 0 ? <button className="topBtn" onClick={this.scrollToTop}>^ back to top ^</button> : ''}
             </div>
         )
     }

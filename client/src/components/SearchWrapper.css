@@ -9,6 +9,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    gap: 4px;
 }
 
 .submit_btn {
@@ -40,4 +41,17 @@
     display: flex;
     justify-content: center;
     gap: 50px;
+}
+
+.SearchWrapper .topBtn {
+    background-color: var(--black-blue);
+    color: var(--white);
+    width: fit-content;
+    align-self: center;
+    border: 1px solid var(--white);
+    padding: 5px 20px;
+}
+
+.SearchWrapper .nameSeachLabel {
+    font-size: .7em;
 }
