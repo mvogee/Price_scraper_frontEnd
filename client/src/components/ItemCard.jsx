@@ -2,9 +2,14 @@ import "./ItemCard.css";
 import React, { useState } from 'react';
 export default ItemCard;
 
+function convertDate(dateStr) {
+    return new Date(Date.parse(dateStr));
+}
 
 function ItemCard(props) {
     const [vissible, setVisible] = useState(false);
+    const date = convertDate(props.dateUpdated).toUTCString();
+    console.log(date);
     return (
         <div className="ItemCard" onClick={() => setVisible(!vissible)}>
             <div className="heading">
@@ -19,7 +24,7 @@ function ItemCard(props) {
                 <li className="detailDescription"><span className="li_label">Description:</span> {props.detailDescription}</li>
                 <li className="alsoKnownAs"><span className="li_label">Also known as:</span> {props.alsoKnownAs}</li>
                 <li className="upc"><span className="li_label">upc:</span> {props.upc}</li>
-                <li className="updatedDate"><span className="li_label">last updated:</span> {props.dateUpdated}</li>
+                <li className="updatedDate"><span className="li_label">last updated:</span> {date}</li>
             </ul>
         </div>
     )
