@@ -1,60 +1,25 @@
 require('dotenv').config();
+const path = require('path');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("./db.js").pool;
 const { pool } = require('./db.js');
 const { getTable, sqlCheck, createSqlQuery } = require('./helpers.js');
-//const plattItm = require("./db.js").plattItm;
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "build")));
 const port = process.env.port || 3095;
 
-
-// connect to database.
-// post route for sql query
-// post route for filter querys
+if (process.env.NODE_ENV === "production") {
+    app.get("/*", (req, res) => {
+        res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+    });
+}
 app.get("/", (req, res) => {
-    res.send("server is working");
+    res.send("pong");
 });
-
-app.post("/sqlQuery", async (req, res) => {
-    const sql = req.body.sqlInput;
-    const resultsPerPage = req.body.resultsPerPage;
-    const totalResults = req.body.resultPage * resultsPerPage;
-    console.log(sql);
-    if (!sqlCheck(sql)) {
-        console.log("sql check did not pass. Illegal variable included in query");
-        res.json({error: "The sql included an illegal variable", message: "The request included an illegal request. (DELETE, INSERT, CREATE, ALTER, DROP) are not allowed queries. please try again."});
-        return ;
-    }
-    try {
-        mysql.query(sql, (err, result) => {
-            if (err) {
-                console.log(err);
-                res.json({error: err.sqlMessage, message: "sql query error"});
-            }
-            else {
-                let responseObj = {numResults: result.length, results: result}
-                console.log(result.length);
-                if (result.length > resultsPerPage) {
-                    responseObj.results = result.slice(totalResults - resultsPerPage, totalResults);
-                    res.send(JSON.stringify(responseObj));
-                }
-                else {
-                    res.send(JSON.stringify(responseObj));
-                }
-            }
-        });
-    }
-    catch(e) {
-        console.log(e);
-        res.json({error: e, message: "database query error"});
-    }
-});
-
-
 
 app.post("/search", (req, res) => {
     const category = req.body.category && req.body.category !== "none" ? req.body.category : null;

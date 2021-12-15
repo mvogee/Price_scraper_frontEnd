@@ -232,8 +232,6 @@ export default class SearchWrapper extends React.Component{
         this.setState((prevState) => ({resultPage: prevState.resultPage - 1}));
         let searchData = Object.assign({}, this.state.lastSubmittedReq);
         searchData.resultPage = this.state.resultPage - 1;
-        console.log("searchData");
-        console.log(searchData);
         if (this.state.lastSubmittedReq.searchType === "form") {
             this.serverDataRequest("/search", searchData, (data) => {this.setState({data: data})});
         }
@@ -245,8 +243,6 @@ export default class SearchWrapper extends React.Component{
         this.setState((prevState) => ({resultPage: prevState.resultPage + 1}));
         let searchData = Object.assign({}, this.state.lastSubmittedReq);
         searchData.resultPage = this.state.resultPage + 1;
-        console.log("searchData");
-        console.log(searchData);
         if (this.state.lastSubmittedReq.searchType === "form") {
             this.serverDataRequest("/search", searchData, (data) => {this.setState({data: data})});
         }
@@ -324,7 +320,6 @@ export default class SearchWrapper extends React.Component{
                         <div className="nextPrevBtns">
                             {this.state.resultPage > 1 ?
                             <button className="previousResultsButton" onClick={this.prevResults}>back</button> : ""}
-                            {console.log(this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage))}
                             {this.state.data.numResults - (this.state.resultsPerPage * this.state.resultPage) > 0 ?
                             <button className="nextResultsButton" onClick={this.nextResults}>next {'>'}</button> : ""}
                         </div>

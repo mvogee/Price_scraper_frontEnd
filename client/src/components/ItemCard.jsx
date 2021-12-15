@@ -9,7 +9,6 @@ function convertDate(dateStr) {
 function ItemCard(props) {
     const [vissible, setVisible] = useState(false);
     const date = convertDate(props.dateUpdated).toUTCString();
-    console.log(date);
     return (
         <div className="ItemCard" onClick={() => setVisible(!vissible)}>
             <div className="heading">

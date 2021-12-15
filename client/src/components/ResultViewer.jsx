@@ -31,7 +31,6 @@ function ResultViewer(props) {
     return (
         <div className="ResultViewer">
             {props.data.results.map(item)}
-            {/* should make a way to only display up to 50 results on one page at a time for large datasets */}
         </div>
     )
 }
