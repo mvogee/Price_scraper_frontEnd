@@ -10,7 +10,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "build")));
-const port = process.env.port || 3095;
+const port = process.env.PORT;
 
 if (process.env.NODE_ENV === "production") {
     app.get("/*", (req, res) => {
