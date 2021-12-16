@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "front end for price scraper",
   "main": "index-frontend.js",
+  "homepage": ".",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

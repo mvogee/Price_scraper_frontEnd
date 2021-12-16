@@ -9,7 +9,7 @@ const { getTable, sqlCheck, createSqlQuery } = require('./helpers.js');
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "client", "build")));
 const port = process.env.PORT;
 
 if (process.env.NODE_ENV === "production") {
