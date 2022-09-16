@@ -58,16 +58,15 @@ export default class SearchWrapper extends React.Component{
     serverDataRequest = async (route, queryInputs, setStateFunc) => {
         const options = {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
+                mode: 'cors',
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
+                credentials: 'same-origin',
                 headers: {
                 'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                redirect: 'follow', // manual, *follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: JSON.stringify(queryInputs) // body data type must match "Content-Type" header
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(queryInputs)
                 };
         const response = await fetch(route , options);
         const body = await response.json();
@@ -141,7 +140,6 @@ export default class SearchWrapper extends React.Component{
             selectedSubCatTwo: "none",
             selectedSubCatThree: "none",
             subCatListThree: [],
-            //subCatListTwo: [{key: 0, value: "sub2 1"}, {key: 1, value: "sub2 2"}, {key: 2, value: "sub2 3"}, {key: 3, value: "sub2 4"}]
         });
     }
     handleSubCatTwoChange(e) {

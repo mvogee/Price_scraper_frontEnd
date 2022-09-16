@@ -3,8 +3,6 @@ import ItemCard from "../itemCard/itemCard";
 import "./ResultViewer.css";
 export default ResultViewer;
 
-// getData should take a queryString and do a fetch request to the server to aquire data
-
 function ResultViewer(props) {
 
     function item(item){
