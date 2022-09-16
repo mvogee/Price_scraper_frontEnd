@@ -1,7 +1,7 @@
 import React from "react";
 //import QueryForm from "./SqlQueryForm";
-import Select from "./Select";
-import ResultViewer from "./ResultViewer";
+import Select from "../select/Select";
+import ResultViewer from "../resultViewer/ResultViewer";
 import "./SearchWrapper.css"
 
 
@@ -161,7 +161,6 @@ export default class SearchWrapper extends React.Component{
         );
         this.setState({
             selectedSubCatTwo: e.target.value,
-            //subCatListThree: [{key: 0, value: "sub3 1"}, {key: 1, value: "sub3 2"}, {key: 2, value: "sub3 3"}, {key: 3, value: "sub3 4"}]
         });
     }
     handleSubCatThreeChange(e) {
@@ -261,10 +260,6 @@ export default class SearchWrapper extends React.Component{
     render() {
         return (
             <div className="SearchWrapper">
-                {/* <form>
-                    <QueryForm sql={this.state.sqlSearch} onChange={this.handleSqlChange}/>
-                    <button type="submit" onClick={this.handleSqlSubmit}><span>Run Query</span></button>
-                </form> */}
                 <form>
                     <Select
                         label="Vendor"
@@ -301,7 +296,7 @@ export default class SearchWrapper extends React.Component{
                         onChange={this.handleSubCatThreeChange}
                         optionList={this.state.subCatListThree}
                     />
-                    <label className="nameSeachLabel" htmlFor="nameSearch">Search term</label>
+                    <label className="nameSearchLabel" htmlFor="nameSearch">Search term</label>
                     <input name="nameSearch" type="text" value={this.state.nameSearch} onChange={this.handleSearchChange} placeholder="20 Amp"></input>
                     <div className="checkboxes">
                         <input name="includeDiscontinued" type="checkbox" checked={this.state.includeDiscontinued} onChange={this.handleCheckBoxChange}></input>

@@ -1,6 +1,6 @@
 
 import './App.css';
-import SearchWrapper from './components/SearchWrapper';
+import SearchWrapper from './components/searchWrapper/SearchWrapper';
 
 function App() {
 const vendors = [{key: 0, value: "Platt"}];

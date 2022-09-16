@@ -1,5 +1,5 @@
 import React from "react";
-import ItemCard from "./ItemCard";
+import ItemCard from "../itemCard/itemCard";
 import "./ResultViewer.css";
 export default ResultViewer;
 
@@ -10,7 +10,7 @@ function ResultViewer(props) {
     function item(item){
         return (
             <ItemCard
-                key={item.id} //! only effective once data is coming from database
+                key={item.id}
                 imageurl={item.img_link}
                 headline={item.headline}
                 category={item.category ? item.category : ""}
